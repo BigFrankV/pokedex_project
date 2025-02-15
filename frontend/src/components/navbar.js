@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import { useTheme } from '../components/ThemeContext';
+
 import {
     AppBar,
     Toolbar,
@@ -16,13 +18,16 @@ import {
     Grass,
     Psychology,
     Public,
-    Home
+    Home,
+    DarkMode,
+    LightMode
 } from '@mui/icons-material';
 import { Link as RouterLink } from 'react-router-dom';
 import './Navbar.css';
 
 const Navbar = () => {
     const [anchorEl, setAnchorEl] = useState(null);
+    const { theme, toggleTheme } = useTheme();
 
     const handleMenu = (event) => {
         setAnchorEl(event.currentTarget);
@@ -33,7 +38,14 @@ const Navbar = () => {
     };
 
     return (
-        <AppBar position="static" className="navbar-custom">
+        <AppBar 
+            position="static" 
+            className="navbar-custom"
+            sx={{
+                backgroundColor: 'var(--card-background)',
+                color: 'var(--text-color)'
+            }}
+        >
             <Container maxWidth="xl">
                 <Toolbar disableGutters>
                     <CatchingPokemon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} />
@@ -81,7 +93,7 @@ const Navbar = () => {
                             component={RouterLink}
                             to="/"
                             startIcon={<Home />}
-                            sx={{ my: 2, color: 'white', display: 'block' }}
+                            sx={{ my: 2, color: 'inherit', display: 'block' }}
                         >
                             Inicio
                         </Button>
@@ -89,7 +101,7 @@ const Navbar = () => {
                             component={RouterLink}
                             to="/pokemons"
                             startIcon={<CatchingPokemon />}
-                            sx={{ my: 2, color: 'white', display: 'block' }}
+                            sx={{ my: 2, color: 'inherit', display: 'block' }}
                         >
                             Pokémon
                         </Button>
@@ -97,7 +109,7 @@ const Navbar = () => {
                             component={RouterLink}
                             to="/berries"
                             startIcon={<Grass />}
-                            sx={{ my: 2, color: 'white', display: 'block' }}
+                            sx={{ my: 2, color: 'inherit', display: 'block' }}
                         >
                             Bayas
                         </Button>
@@ -105,7 +117,7 @@ const Navbar = () => {
                             component={RouterLink}
                             to="/abilities"
                             startIcon={<Psychology />}
-                            sx={{ my: 2, color: 'white', display: 'block' }}
+                            sx={{ my: 2, color: 'inherit', display: 'block' }}
                         >
                             Habilidades
                         </Button>
@@ -113,11 +125,15 @@ const Navbar = () => {
                             component={RouterLink}
                             to="/regions"
                             startIcon={<Public />}
-                            sx={{ my: 2, color: 'white', display: 'block' }}
+                            sx={{ my: 2, color: 'inherit', display: 'block' }}
                         >
                             Regiones
                         </Button>
                     </Box>
+
+                    <IconButton onClick={toggleTheme} color="inherit">
+                        {theme === 'light' ? <DarkMode /> : <LightMode />}
+                    </IconButton>
                 </Toolbar>
             </Container>
         </AppBar>

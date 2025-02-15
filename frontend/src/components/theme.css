@@ -1,0 +1,22 @@
+:root[data-theme="light"] {
+    --primary-color: #ff5350;
+    --background-color: #ffffff;
+    --text-color: #333333;
+    --card-background: #f0f0f0;
+    --border-color: #dddddd;
+    --pokemon-card-bg: #ffffff;
+    --pokemon-detail-bg: #ffffff;
+    --pokemon-detail-text: #333333;
+  }
+  
+  :root[data-theme="dark"] {
+    --primary-color: #ff7675;
+    --background-color: #1a1a1a;
+    --text-color: #ffffff;
+    --card-background: #2d2d2d;
+    --border-color: #404040;
+    --pokemon-card-bg: #2d2d2d;
+    --pokemon-detail-bg: #2d2d2d;
+    --pokemon-detail-text: #ffffff;
+  }
+  

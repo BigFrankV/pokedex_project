@@ -1,0 +1,60 @@
+.berries-container {
+    padding: 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  
+  .berries-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 20px;
+    padding: 20px;
+  }
+  
+  .berry-card {
+    background: white;
+    border-radius: 10px;
+    padding: 15px;
+    text-align: center;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    transition: transform 0.3s ease;
+  }
+  
+  .berry-card:hover {
+    transform: translateY(-5px);
+  }
+  
+  .berry-image {
+    width: 80px;
+    height: 80px;
+    object-fit: contain;
+    margin-bottom: 10px;
+  }
+  
+  .berry-info {
+    font-size: 0.9em;
+    color: #666;
+  }
+  
+  .berry-info p {
+    margin: 5px 0;
+  }
+  
+  h1 {
+    text-align: center;
+    color: #333;
+    margin-bottom: 30px;
+  }
+  
+  .loading {
+    text-align: center;
+    font-size: 1.5em;
+    margin-top: 50px;
+  }
+  
+  @media (max-width: 768px) {
+    .berries-grid {
+      grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    }
+  }
+  

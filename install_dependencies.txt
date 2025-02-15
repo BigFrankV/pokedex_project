@@ -1,0 +1,39 @@
+# 🔥 Instalación de Dependencias para el Proyecto Django + React
+
+## 1️⃣ Instalaciones en el Backend (Django)
+cd backend
+pip install django djangorestframework django-cors-headers requests drf-yasg
+
+# Guardar dependencias en un archivo
+pip freeze > requirements.txt
+
+## 2️⃣ Instalaciones en el Frontend (React)
+cd ../frontend
+npm install react react-dom react-router-dom axios bootstrap
+
+# Opcional: Material UI para mejor diseño
+npm install @mui/material @mui/icons-material @emotion/react @emotion/styled
+
+# Opcional: React Query para manejar datos de la API
+npm install react-query
+
+# Opcional: ESLint y Prettier para mejor calidad de código
+npm install --save-dev eslint prettier eslint-config-prettier eslint-plugin-prettier
+
+# Opcional: SASS si prefieres estilos SCSS en lugar de CSS puro
+npm install sass
+
+# Opcional: Vite si usas Vite en vez de Create React App
+npm install vite
+
+## 3️⃣ Cómo Ejecutar el Proyecto
+
+# Iniciar el backend de Django
+cd ../backend
+python manage.py runserver
+
+# Iniciar el frontend de React
+cd ../frontend
+npm start
+
+# 🔥 Con estos comandos el proyecto estará listo para ejecutarse. 🚀

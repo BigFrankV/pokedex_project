@@ -1,0 +1,19 @@
+.navbar-custom {
+  background: linear-gradient(90deg, #ff0000 0%, #cc0000 100%);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.navbar-custom .MuiButton-root:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+  transform: translateY(-2px);
+  transition: all 0.3s ease;
+}
+
+.navbar-custom .MuiIconButton-root:hover {
+  transform: scale(1.1);
+  transition: all 0.3s ease;
+}
+
+.navbar-custom .MuiTypography-root {
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+}

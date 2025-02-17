@@ -135,11 +135,13 @@ def get_pokemon_by_habitat(request, habitat_name):
 
 @api_view(['GET'])
 def get_evolution_chain(request, evolution_id):
-    """ Obtiene la cadena de evolución de un Pokémon """
     url = f"{POKEAPI_BASE_URL}evolution-chain/{evolution_id}"
     response = requests.get(url)
+    
+    if response.status_code == 200:
+        datos_evolucion = response.json()
+        return Response(datos_evolucion)
+    return Response({"error": "Cadena evolutiva no encontrada"}, status=404)
 
-    if response.status_code != 200:
-        return Response({"error": "Cadena de evolución no encontrada"}, status=404)
+  
 
-    return Response(response.json())

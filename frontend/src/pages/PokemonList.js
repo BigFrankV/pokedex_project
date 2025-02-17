@@ -2,23 +2,25 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import "./PokemonList.css";
 import PokemonModal from "../components/PokemonModal"; // ✅ Importación correcta
+import { TIPOS_POKEMON, FilterButtons } from '../components/pokemonTypes';
+import { RegionButtons, REGIONES_POKEMON } from '../components/pokemonRegions';
 
 const API_URL = "http://127.0.0.1:8000/api/pokemons/";
+
+
 
 const PokemonList = () => {
   const [pokemons, setPokemons] = useState([]);
   const [filteredPokemons, setFilteredPokemons] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedPokemon, setSelectedPokemon] = useState(null);
-  const [offset, setOffset] = useState(0);
+  const [setOffset] = useState(0);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [tipoSeleccionado, setTipoSeleccionado] = useState(null);
+  const [regionSeleccionada, setRegionSeleccionada] = useState(null);
 
-  useEffect(() => {
-    if (pokemons.length === 0) {
-      loadPokemons(0, true);
-    }
-  }, [pokemons.length]);
+  
 
   const loadPokemons = async (currentOffset, reset = false) => {
     setLoading(true);
@@ -58,18 +60,26 @@ const PokemonList = () => {
       console.error("Error al obtener detalles del Pokémon:", err);
     }
   };
+  useEffect(() => {
+    if (pokemons.length === 0) {
+        loadPokemons(0, true);
+    }
+  }, [pokemons.length, loadPokemons]);
+
+
 
   // 🔎 Filtrado en tiempo real (por nombre)
   useEffect(() => {
-    if (searchTerm.trim() === "") {
-      setFilteredPokemons(pokemons);
-    } else {
-      const filtered = pokemons.filter((poke) =>
-        poke.name.toLowerCase().includes(searchTerm.toLowerCase())
-      );
-      setFilteredPokemons(filtered);
-    }
-  }, [searchTerm, pokemons]);
+    const filtered = pokemons.filter(pokemon => {
+        const coincideNombre = pokemon.name.toLowerCase().includes(searchTerm.toLowerCase());
+        const coincideTipo = !tipoSeleccionado || 
+            pokemon.types.some(type => type.type.name === tipoSeleccionado);
+        const coincideRegion = !regionSeleccionada || 
+            pokemon.id <= REGIONES_POKEMON.find(r => r.nombre === regionSeleccionada)?.limite;
+        return coincideNombre && coincideTipo && coincideRegion;
+    });
+    setFilteredPokemons(filtered);
+}, [searchTerm, pokemons, tipoSeleccionado, regionSeleccionada]);
 
   return (
     <div className="pokemon-container">
@@ -86,7 +96,15 @@ const PokemonList = () => {
 
       {error && <p className="error-message">{error}</p>}
 
-
+      <FilterButtons 
+    tipoSeleccionado={tipoSeleccionado} 
+    setTipoSeleccionado={setTipoSeleccionado} 
+    />
+    <RegionButtons 
+        regionSeleccionada={regionSeleccionada}
+        setRegionSeleccionada={setRegionSeleccionada}
+    />
+      
       <div className="pokemon-grid">
         {filteredPokemons.length > 0 ? (
           filteredPokemons.map((poke, index) => (
@@ -106,11 +124,7 @@ const PokemonList = () => {
         )}
       </div>
 
-      {!loading && (
-        <button className="load-more" onClick={() => loadPokemons(offset)}>
-          Mostrar más
-        </button>
-      )}
+
 
       {/* 🟢 Modal de detalles cuando se selecciona un Pokémon */}
       {selectedPokemon && <PokemonModal pokemon={selectedPokemon} onClose={() => setSelectedPokemon(null)} />}

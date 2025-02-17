@@ -1,0 +1,32 @@
+.seccion-evolucion {
+    margin-top: 20px;
+    padding: 15px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+}
+
+.contenedor-evoluciones {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+    padding: 10px;
+}
+
+.pokemon-evolucion {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.pokemon-evolucion img {
+    width: 80px;
+    height: 80px;
+    transition: transform 0.3s;
+}
+
+.flecha-evolucion {
+    font-size: 24px;
+    color: #666;
+    margin: 0 10px;
+}

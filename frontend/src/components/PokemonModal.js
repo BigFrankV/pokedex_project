@@ -1,57 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { Box, LinearProgress, Typography, styled } from '@mui/material';
+import { Box, LinearProgress, Typography } from '@mui/material';
 import "./PokemonModal.css";
-
-const StyledProgress = styled(LinearProgress)(({ value }) => ({
-    height: 10,
-    borderRadius: 5,
-    [`&.MuiLinearProgress-colorPrimary`]: {
-        backgroundColor: 'rgba(255, 255, 255, 0.2)',
-    },
-    [`& .MuiLinearProgress-bar`]: {
-        borderRadius: 5,
-        backgroundColor: value < 50 ? '#ff6b6b' : value < 80 ? '#ffd93d' : '#4caf50',
-        transition: 'transform 1s ease-in-out',
-    },
-}));
-
-const StatBar = ({ name, value }) => (
-    <Box sx={{ my: 1.5, width: '100%' }}>
-        <Box sx={{ 
-            display: 'flex', 
-            justifyContent: 'space-between', 
-            mb: 1,
-            alignItems: 'center' 
-        }}>
-            <Typography 
-                variant="body1" 
-                sx={{ 
-                    textTransform: 'capitalize',
-                    fontWeight: 500
-                }}
-            >
-                {name}
-            </Typography>
-            <Typography 
-                variant="body1" 
-                fontWeight="bold"
-                sx={{ minWidth: '45px', textAlign: 'right' }}
-            >
-                {value}
-            </Typography>
-        </Box>
-        <StyledProgress
-      
-        variant="determinate"
-        value={(value / 255) * 100}/>
-
-    </Box>
-);
+import { COLORES_ESTADISTICAS } from '../services/pokemonApi';
 
 const PokemonModal = ({ pokemon, onClose }) => {
-    const [habitat, setHabitat] = useState(null);
+    const [setHabitat] = useState(null);
     const [evoluciones, setEvoluciones] = useState(null);
+    const [pokemonsByHabitat, setPokemonsByHabitat] = useState([]);
 
     useEffect(() => {
         const fetchHabitat = async () => {
@@ -62,8 +18,9 @@ const PokemonModal = ({ pokemon, onClose }) => {
                 console.log('Error al cargar hábitat:', error);
             }
         };
+    
         fetchHabitat();
-    }, [pokemon.name]);
+    }, [pokemon.name, setHabitat]);
 
     useEffect(() => {
         const fetchEvoluciones = async () => {
@@ -76,6 +33,23 @@ const PokemonModal = ({ pokemon, onClose }) => {
         };
         fetchEvoluciones();
     }, [pokemon.id]);
+
+    useEffect(() => {
+    const fetchPokemonsByHabitat = async () => {
+        try {
+            const response = await axios.get(`http://localhost:8000/api/pokemon-by-habitat/${pokemon.id}`);
+            setPokemonsByHabitat(response.data);
+        } catch (error) {
+            console.log('Error al cargar pokémon del mismo hábitat:', error);
+        }
+    };
+    
+    if (pokemon.id) {
+        fetchPokemonsByHabitat();
+    }
+}, [pokemon.id, setPokemonsByHabitat]);
+    
+    
 
     return (
         <div className="modal-overlay" onClick={onClose}>
@@ -155,13 +129,37 @@ const PokemonModal = ({ pokemon, onClose }) => {
                         <div className="stats-section">
                             <h3>Estadísticas Base</h3>
                             <Box sx={{ width: '100%', p: 2 }}>
-                                {pokemon.stats.map((stat, index) => (
-                                    <StatBar
-                                        key={index}
-                                        name={stat.stat.name}
-                                        value={stat.base_stat}
-                                    />
-                                ))}
+                                {pokemon.stats.map((stat, index) => {
+                                    const nombreEstadistica = {
+                                        'hp': 'hp',
+                                        'attack': 'ataque',
+                                        'defense': 'defensa',
+                                        'special-attack': 'ataque-especial',
+                                        'special-defense': 'defensa-especial',
+                                        'speed': 'velocidad'
+                                    }[stat.stat.name];
+
+                                    return (
+                                        <Box key={index} sx={{ mb: 2 }}>
+                                            <Typography variant="body2" sx={{ mb: 1 }}>
+                                                {nombreEstadistica.toUpperCase()}: {stat.base_stat}
+                                            </Typography>
+                                            <LinearProgress
+                                                variant="determinate"
+                                                value={(stat.base_stat / 255) * 100}
+                                                sx={{
+                                                    height: 10,
+                                                    borderRadius: 5,
+                                                    backgroundColor: 'rgba(0,0,0,0.1)',
+                                                    '& .MuiLinearProgress-bar': {
+                                                        backgroundColor: COLORES_ESTADISTICAS[nombreEstadistica],
+                                                        borderRadius: 5
+                                                    }
+                                                }}
+                                            />
+                                        </Box>
+                                    );
+                                })}
                             </Box>
                         </div>
 
@@ -197,17 +195,24 @@ const PokemonModal = ({ pokemon, onClose }) => {
                             </div>
 
                             <div className="detail-item">
-                                <h3>Hábitat</h3>
-                                <div className="habitat-info">
-                                    {habitat && habitat.pokemon_species && (
-                                        habitat.pokemon_species.map((species, index) => (
-                                            <span key={index} className="habitat-badge">
-                                                {species.name}
-                                            </span>
+                                <h3>Pokémon del mismo hábitat</h3>
+                                <div className="habitat-pokemon-list">
+                                    {pokemonsByHabitat.length > 0 ? (
+                                        pokemonsByHabitat.slice(0, 5).map((pokemon, index) => (
+                                            <div key={index} className="habitat-pokemon-item">
+                                                <img 
+                                                    src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${pokemon.id}.png`}
+                                                    alt={pokemon.name}
+                                                />
+                                                <span>{pokemon.name}</span>
+                                            </div>
                                         ))
+                                    ) : (
+                                        <p>No hay información de otros Pokémon en este hábitat</p>
                                     )}
                                 </div>
                             </div>
+
                         </div>
                     </div>
                 </div>

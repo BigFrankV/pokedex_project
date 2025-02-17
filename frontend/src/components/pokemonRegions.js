@@ -28,8 +28,12 @@ export const REGIONES_POKEMON = [
     { nombre: 'unova', color: '#FFAA55', limite: 649 },
     { nombre: 'kalos', color: '#55FFFF', limite: 721 },
     { nombre: 'alola', color: '#FFFF55', limite: 809 },
-    { nombre: 'galar', color: '#AA55FF', limite: 898 }
+    { nombre: 'galar', color: '#AA55FF', limite: 898 },
+    { nombre: 'mega-x', color: '#3366FF', limite: 'mega-x' },
+    { nombre: 'mega-y', color: '#FF3366', limite: 'mega-y' },
+    { nombre: 'gigamax', color: '#FF0000', limite: 'max' }
 ];
+
 
 export const RegionButtons = ({ regionSeleccionada, setRegionSeleccionada }) => {
     return (

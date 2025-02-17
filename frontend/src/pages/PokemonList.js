@@ -74,7 +74,10 @@ const PokemonList = () => {
         const coincideNombre = pokemon.name.toLowerCase().includes(searchTerm.toLowerCase());
         const coincideTipo = !tipoSeleccionado || 
             pokemon.types.some(type => type.type.name === tipoSeleccionado);
-        const coincideRegion = !regionSeleccionada || 
+            const coincideRegion = !regionSeleccionada || 
+            (regionSeleccionada === 'mega-x' && pokemon.sprites?.mega_x) ||
+            (regionSeleccionada === 'mega-y' && pokemon.sprites?.mega_y) ||
+            (regionSeleccionada === 'gigamax' && pokemon.sprites?.gmax) ||
             pokemon.id <= REGIONES_POKEMON.find(r => r.nombre === regionSeleccionada)?.limite;
         return coincideNombre && coincideTipo && coincideRegion;
     });
